@@ -3,7 +3,7 @@ name: Build Project
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch:   # 👈 thêm dòng này để có nút bấm
+  workflow_dispatch:
 
 jobs:
   build:
@@ -12,8 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.3
+      - name: Install DirectX 9 SDK
+        run: choco install directx-sdk -y
 
-      - name: Build solution
-        run: msbuild sampvoice.sln /p:Configuration=Release
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet
+        run: nuget restore sampvoice.sln
+
+      - name: Build
+        run: msbuild sampvoice.sln /p:Configuration=Release /p:Platform=x86 /p:WindowsTargetPlatformVersion=10.0
