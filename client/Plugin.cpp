@@ -547,6 +547,25 @@ void Plugin::ControlPacketHandler(const ControlPacket& controlPacket)
 
             iter->second->EffectDelete(stData.effect);
         } break;
+        case SV_CONTROL_STREAM_SET_RADIO:
+        {
+            // Ép kiểu dữ liệu nhận được thành struct của chúng ta
+            const auto& stData = *reinterpret_cast<const RadioEffectPacket*>(controlPacket.data);
+            
+            // Kiểm tra xem kích thước gói tin có chuẩn không
+            if (controlPacket.length != sizeof(stData)) break;
+
+            // Ghi log ra file svlog.txt để dễ debug
+            Logger::LogToFile("[sv:dbg:plugin:setradio] : stream(%p), enable(%d)", 
+                stData.stream, stData.enable);
+
+            // Tìm luồng âm thanh trong danh sách stream hiện tại của game
+            const auto iter = Plugin::streamTable.find(stData.stream);
+            if (iter == Plugin::streamTable.end()) break;
+
+            // GỌI HÀM BẬT/TẮT BỘ ĐÀM MÀ CHÚNG TA ĐÃ VIẾT TRONG STREAM.CPP
+            iter->second->SetRadioEffect(stData.enable);
+        } break;
     }
 }
 
