@@ -9,6 +9,17 @@
 
 #include "Plugin.h"
 
+// --- THÊM VÀO ĐÂY ---
+#define SV_CONTROL_STREAM_SET_RADIO 200
+
+#pragma pack(push, 1)
+struct RadioEffectPacket {
+    DWORD stream;
+    bool enable;
+};
+#pragma pack(pop)
+// -------------------
+
 #include <cassert>
 
 #include <game/CRadar.h>
