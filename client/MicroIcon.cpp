@@ -141,58 +141,7 @@ void MicroIcon::SwitchToMutedIcon() noexcept
 
 void MicroIcon::Render() noexcept
 {
-    if (!MicroIcon::initStatus)
-        return;
-
-    if (!MicroIcon::showStatus)
-        return;
-
-    float vIconSize { 0.f };
-
-    if (!Render::ConvertBaseYValueToScreenYValue(kBaseIconSize, vIconSize))
-        return;
-
-    vIconSize *= PluginConfig::GetMicroIconScale();
-
-    float vIconX = PluginConfig::GetMicroIconPositionX();
-    float vIconY = PluginConfig::GetMicroIconPositionY();
-
-    if (vIconX < 0.f || vIconY < 0.f)
-    {
-        CRect radarRect;
-
-        if (!GameUtil::GetRadarRect(radarRect))
-            return;
-
-        float vIconPadding { 0.f };
-
-        if (!Render::ConvertBaseYValueToScreenYValue(kBaseIconPadding, vIconPadding))
-            return;
-
-        vIconX = radarRect.left + (radarRect.right - radarRect.left) / 2.f;
-        vIconY = radarRect.top - (vIconPadding + vIconSize / 2.f);
-    }
-
-    vIconX -= vIconSize / 2.f;
-    vIconY -= vIconSize / 2.f;
-
-    if (MicroIcon::alphaLevelPassiveIcon > 0)
-    {
-        MicroIcon::tPassiveIcon->Draw(vIconX, vIconY, vIconSize, vIconSize, (PluginConfig::GetMicroIconColor() &
-            0x00ffffff) | (MicroIcon::alphaLevelPassiveIcon << 24), PluginConfig::GetMicroIconAngle());
-    }
-
-    if (MicroIcon::alphaLevelActiveIcon > 0)
-    {
-        MicroIcon::tActiveIcon->Draw(vIconX, vIconY, vIconSize, vIconSize, (PluginConfig::GetMicroIconColor() &
-            0x00ffffff) | (MicroIcon::alphaLevelActiveIcon << 24), PluginConfig::GetMicroIconAngle());
-    }
-
-    if (MicroIcon::alphaLevelMutedIcon > 0)
-    {
-        MicroIcon::tMutedIcon->Draw(vIconX, vIconY, vIconSize, vIconSize, (PluginConfig::GetMicroIconColor() &
-            0x00ffffff) | (MicroIcon::alphaLevelMutedIcon << 24), PluginConfig::GetMicroIconAngle());
-    }
+    return;
 }
 
 void MicroIcon::Update() noexcept
