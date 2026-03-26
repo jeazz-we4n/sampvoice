@@ -54,6 +54,7 @@ public:
     void SlideParameter(BYTE parameter, float startValue, float endValue, DWORD time);
     void EffectCreate(DWORD effect, DWORD number, int priority, const void* paramPtr, DWORD paramSize);
     void EffectDelete(DWORD effect);
+    void SetRadioEffect(bool enable);
 
     std::size_t AddPlayCallback(PlayCallback playCallback);
     std::size_t AddStopCallback(StopCallback stopCallback);
@@ -85,6 +86,7 @@ private:
 
     std::map<BYTE, ParameterPtr> parameters;
     std::map<DWORD, EffectPtr> effects;
+    bool isRadioActive = false;
 
 };
 
