@@ -12,6 +12,16 @@
 #include <util/logger.h>
 #include <util/memory.hpp>
 
+// Chọn ID 200 để chắc chắn không bị trùng với bất kỳ packet nào có sẵn của SampVoice
+#define SV_CONTROL_STREAM_SET_RADIO 200 
+
+#pragma pack(push, 1)
+struct RadioEffectPacket {
+    uint32_t streamId;
+    bool enable;
+};
+#pragma pack(pop)
+
 bool Pawn::Init(PawnInterfacePtr pInterface) noexcept
 {
     return (Pawn::pInterface = std::move(pInterface)) != nullptr;
