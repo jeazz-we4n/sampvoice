@@ -3,6 +3,7 @@ name: Build Project
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:   # 👈 thêm dòng này để có nút bấm
 
 jobs:
   build:
