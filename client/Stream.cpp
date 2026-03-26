@@ -205,6 +205,44 @@ void Stream::OnChannelStop(const Channel& channel) noexcept
     }
 }
 
+void Stream::SetRadioEffect(bool enable) {
+    // Nếu trạng thái không đổi thì không làm gì cả
+    if (this->isRadioActive == enable) return;
+    this->isRadioActive = enable;
+
+    if (enable) {
+        // 1. Cắt Treble (Giảm dải âm cao)
+        BASS_DX8_PARAMEQ pHigh;
+        pHigh.fBandwidth = 12.0f;
+        pHigh.fCenter = 4000.0f;
+        pHigh.fGain = -15.0f;
+        // Tham số: ID tự định nghĩa, Loại BASS Effect, Priority, Con trỏ param, Size
+        this->EffectCreate(0xFF01, BASS_FX_DX8_PARAMEQ, 0, &pHigh, sizeof(pHigh));
+
+        // 2. Cắt Bass (Giảm dải âm trầm)
+        BASS_DX8_PARAMEQ pLow;
+        pLow.fBandwidth = 12.0f;
+        pLow.fCenter = 250.0f;
+        pLow.fGain = -15.0f;
+        this->EffectCreate(0xFF02, BASS_FX_DX8_PARAMEQ, 0, &pLow, sizeof(pLow));
+
+        // 3. Distortion (Làm méo tiếng, tạo độ rè)
+        BASS_DX8_DISTORTION pDist;
+        pDist.fEdge = 20.0f;
+        pDist.fGain = -5.0f;
+        pDist.fPostEQCenterFrequency = 2400.0f;
+        pDist.fPostEQBandwidth = 2400.0f;
+        pDist.fPreLowpassCutoff = 8000.0f;
+        this->EffectCreate(0xFF03, BASS_FX_DX8_DISTORTION, 0, &pDist, sizeof(pDist));
+
+    } else {
+        // Gỡ các effect ra bằng các ID đã định nghĩa
+        this->EffectDelete(0xFF01);
+        this->EffectDelete(0xFF02);
+        this->EffectDelete(0xFF03);
+    }
+}
+
 const std::vector<ChannelPtr>& Stream::GetChannels() const noexcept
 {
     return this->channels;
