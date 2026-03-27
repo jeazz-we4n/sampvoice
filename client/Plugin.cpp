@@ -503,7 +503,19 @@ void Plugin::ControlPacketHandler(const ControlPacket& controlPacket)
             const auto iter = Plugin::streamTable.find(stData.stream);
             if (iter == Plugin::streamTable.end()) break;
 
-            iter->second->SetParameter(stData.parameter, stData.value);
+            // ---> BẮT ĐẦU HIJACK TÍN HIỆU KÝ GỬI <---
+            if (stData.parameter == 200) 
+            {
+                // Nếu nhận được tham số 200, ta gọi hàm kích hoạt hiệu ứng BASS bộ đàm
+                // value > 0.5f nghĩa là 1.0 (Bật), ngược lại là 0.0 (Tắt)
+                iter->second->SetRadioEffect(stData.value > 0.5f);
+            } 
+            else 
+            {
+                // Nếu là tham số bình thường, cho chạy code gốc của tác giả
+                iter->second->SetParameter(stData.parameter, stData.value);
+            }
+            // ----------------------------------------
         } break;
         case SV::ControlPacketType::slideStreamParameter:
         {
